@@ -14,7 +14,7 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class MaestrosService {
-  private apiUrl = 'http://localhost:8000/api';
+  private apiUrl = environment.url_api;
 
   private httpOptions = {
     headers: new HttpHeaders({
