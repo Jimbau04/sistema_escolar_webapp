@@ -42,6 +42,11 @@ export class EventosService {
     };
   }
 
+  //formating de hora a minutos
+  private toMinutes(hora: string): number {
+    const [h, m] = hora.split(':').map(Number);
+    return h * 60 + m;
+  }
   /**
    * Valida el formulario de evento académico
    */
@@ -90,12 +95,14 @@ export class EventosService {
     // ========== VALIDACIÓN: HORA DE FIN ==========
     if (!this.validatorService.required(data['hora_fin'])) {
       error['hora_fin'] = this.errorService.required;
-    } else if (
-      data['hora_inicio'] &&
-      data['hora_fin'] &&
-      data['hora_fin'] <= data['hora_inicio']
-    ) {
-      error['hora_fin'] = 'La hora de fin debe ser mayor que la hora de inicio';
+    } else {
+      const inicio = this.toMinutes(data['hora_inicio']);
+      const fin = this.toMinutes(data['hora_fin']);
+
+      if (fin <= inicio) {
+        error['hora_fin'] =
+          'La hora de fin debe ser mayor que la hora de inicio';
+      }
     }
 
     // ========== VALIDACIÓN: LUGAR ==========
